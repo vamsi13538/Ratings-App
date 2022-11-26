@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ratings | Home</title>
+    <script src="https://kit.fontawesome.com/7e99a9e738.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        .stars-outer{
+            position: relative;
+            display: inline-block;
+        }
+        .stars-inner{
+            position: absolute;
+            top: 0;
+            left: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+        }
+        .stars-outer::before{
+            content: '\f005' '\f005' '\f005' '\f005' '\f005';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: darkgray;
+        }
+        .stars-inner::before{
+            content: '\f005' '\f005' '\f005' '\f005' '\f005';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 700;
+            color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="container bg-dark text-white p-2 rounded">
+            <h1>Products Rating App <i class="fa-regular fa-star" style="color: yellow;"></i></h1>
+        </div>
+        <div class="form-group mt-4">
+            <select class="form-control custom-select" id="product-select">
+                <option value="0" disabled selected>Select a product to Rate...</option>
+                <option value="sony">Sony 4K Tv</option>
+                <option value="samsung">Samsung 4K TV</option>
+                <option value="panasonic">Panasonic 4K TV</option>
+                <option value="redmi">Redmi 4K TV</option>
+            </select>
+        </div>
+        <div class="one">
+            <div class="two"></div>
+        </div>
+        <div class="form-group mt-3">
+            <input type="number" class="form-control" id="rating-select" step="0.1" max="5" placeholder="Rae 1 - 5" disabled>
+        </div>
+        <table class="table table-striped table-hover table-bordered mt-2">
+            <thead>
+                <tr>
+                    <th>Telivison Name</th>
+                    <th>Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="sony">
+                    <td>Sony 4K TV</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-ratings"></span>
+                    </td>
+                </tr>
+                <tr class="samsung">
+                    <td>Samsung 4K TV</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-ratings"></span>
+                    </td>
+                </tr>
+                <tr class="panasonic">
+                    <td>Panasonic 4K TV</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-ratings"></span>
+                    </td>
+                </tr>
+                <tr class="redmi">
+                    <td>Redmi 4K TV</td>
+                    <td>
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <span class="number-ratings"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script> 
+        let ratings = {
+            sony: 4.1,
+            samsung: 3.6,
+            panasonic: 2.4,
+            redmi: 4.6
+        };
+
+        const starsTotal = 5;
+
+        document.addEventListener('DOMContentLoaded', getRatings);
+
+        const productSelect = document.getElementById('product-select');
+        const ratingControl = document.getElementById('rating-select');
+        
+        let product;
+
+        productSelect.addEventListener('change', (e) => {
+            product = e.target.value;
+            ratingControl.disabled = false;
+            ratingControl.value = ratings[product];
+        })
+
+            ratingControl.addEventListener('blur', (e) => {
+                let rating = e.target.value;
+                if(rating > starsTotal){
+                    showMessage('Please Rate From 1 - 5', 'alert-danger')
+                }
+                else{
+                    ratings[product] = rating;
+                
+                getRatings();
+
+                showMessage('Thanks For Your FeedBack', 'alert-success');
+
+                }
+
+            })
+
+        function getRatings(){
+            for(let rating in ratings){
+                const starPercentage = (ratings[rating] / starsTotal ) *  100;
+                const starPercentageRounded = `${Math.round(starPercentage/10)* 10}%`;
+                
+                document.querySelector(`.${rating} .stars-inner`).style.width = starPercentageRounded;
+
+                document.querySelector(`.${rating} .number-ratings`).innerHTML = `-------->${ratings[rating]}`;
+            }
+        };
+
+        function showMessage(message, className){
+            const div = document.createElement('div');
+            div.className = `alert mt-2 ${className}`;
+            
+            const one = document.querySelector('.one');
+            const two = document.querySelector('.two');
+
+            div.appendChild(document.createTextNode(message));
+
+            one.insertBefore(div, two);
+
+            setTimeout(function (){
+                document.querySelector('.alert').remove();
+            }, 2000);
+            
+        }
+
+
+
+    </script>
+</body>
+</html>
